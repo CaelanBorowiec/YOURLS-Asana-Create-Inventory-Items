@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: Asana Data Import
-Plugin URI: https://github.com/CaelanBorowiec/YOURLS-Asana-Details-Lookup/
-Description: Load url details from Asana
-Version: 0.2
+Plugin Name: Asana Create Inventory Items
+Plugin URI: https://github.com/CaelanBorowiec/YOURLS-Asana-Create-Inventory-Items/
+Description: Create item tasks in bulk
+Version: 0.0
 Author: Caelan Borowiec
 Author URI: https://github.com/CaelanBorowiec
 */
