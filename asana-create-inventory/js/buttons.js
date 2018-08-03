@@ -11,33 +11,33 @@ $(document).ready(function(){
         e.preventDefault();
         var button = $(this);
 
-        if (!finished)
-        {
-          button.progressSet(5);
 
-          var start = 100276;
-          var num = 10;
+        button.progressSet(5);
 
-          var i = 0;
-          var progress = 0;
-          while (i<num)
-          {
-            //alert("Pass "+i);
-            var code = start+i;
-            $.get( "/yourls-api.php?action=createaot&start="+code+"&count=1", function( data ) {
-              console.log(data);
-              progress += (100/num);
-              button.progressSet(progress);
-              if (progress >= 100)
-                finished = true;
-            });
-            i++;
-          }
-        }
-        else if (finished)
+        var start = 100296;
+        var num = 10;
+
+        var i = 0;
+        var progress = 0;
+        while (i<num)
         {
-            alert("serve download!");
+          //alert("Pass "+i);
+          var code = start+i;
+          $.get( "/yourls-api.php?action=createaot&start="+code+"&count=1", function( data ) {
+            console.log(data);
+            progress += (100/num);
+            button.progressSet(progress);
+            if (progress >= 100)
+            {
+              $('#generateButton').on('click', function(e){
+                alert("serve download!");
+              });
+            }
+          });
+          i++;
         }
+
+
 
     });
 
