@@ -8,6 +8,10 @@ Author: Caelan Borowiec
 Author URI: https://github.com/CaelanBorowiec
 */
 
+define("PQINEWITEMS", "753161808822863");
+define("LEVYLABNEWITEMS", "687756245553300");
+define("LEVYLABNEWSAMPLES", "687756245553298");
+
 // No direct load
 if ( !defined ('YOURLS_ABSPATH') ) { die(); }
 
@@ -43,8 +47,11 @@ function aot_create_item_display_page() {
 yourls_add_filter( 'api_action_createaot', 'create_aot_record' );
 
 function create_aot_record() {
+  //  API can't be accessed without a valid login already (YOURLS Default)
+
 	// Need 'count' parameter
-	if( !isset($_REQUEST['count']) || !is_numeric($_REQUEST['count']))
+  $count = $_REQUEST['count'];
+	if( !isset($count) || !is_numeric($count))
   {
 		return array(
 			'statusCode' => 400,
@@ -52,8 +59,8 @@ function create_aot_record() {
 			'message'    => 'Error: Invalid parameter: count',
 		);
 	}
-
-  if( !isset($_REQUEST['start']) || !is_numeric($_REQUEST['start']))
+  // Need 'start' parameter
+  if(!isset($_REQUEST['start']) || !is_numeric($_REQUEST['start']))
   {
     return array(
       'statusCode' => 400,
@@ -62,14 +69,34 @@ function create_aot_record() {
     );
   }
 
-	$start = $_REQUEST['start'];
 	// Check if valid shorturl
-	if( yourls_is_shorturl($start) ) {
+	if(yourls_is_shorturl($_REQUEST['start']))
+  {
 		return array(
 			'statusCode' => 400,
-			'simple '    => 'Error: Start value already exists',
+			'simple'     => 'Error: Start value already exists',
 			'message'    => 'Error: Start value already exists',
 		);
 	}
+
+
+  $start = $_REQUEST['start'];
+  $current = $start;
+  $last = $current + $count;
+  $details = "";
+
+  for (; $current <= $last; $current++) {
+    PQINEWITEMS
+    $details .= "$current, \r\n";
+  }
+
+  return array(
+    'statusCode'  => 200,
+    'simple'      => 'ok',
+    'message'     => "Created $count barcodes from $start to $last",
+    'details'     => $details,
+  );
+
+
 
 }
