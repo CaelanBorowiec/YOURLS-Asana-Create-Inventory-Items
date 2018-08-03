@@ -8,11 +8,11 @@ Author: Caelan Borowiec
 Author URI: https://github.com/CaelanBorowiec
 */
 
-require_once('settings.php');
-require_once('asana-api-php-class/asana.php');
-
 // No direct load
 if ( !defined ('YOURLS_ABSPATH') ) { die(); }
+
+require_once('settings.php');
+require_once('asana-api-php-class/asana.php');
 
 // Register a page
 yourls_add_action( 'plugins_loaded', 'aot_create_item_page' );
@@ -79,12 +79,12 @@ function create_aot_record() {
 	}
 
   $asana = new Asana([
-      'personalAccessToken' => $asanaPAT
+      'personalAccessToken' => asanaPAT
   ]);
 
   $start = $_REQUEST['start'];
   $current = $start;
-  $last = $current + $count;
+  $last = $current + $count - 1;
   $details = "";
 
   $description = "1. Describe the item and attach a photo
@@ -94,14 +94,28 @@ function create_aot_record() {
   for (; $current <= $last; $current++)
   {
     $asana->createTask([
-  		 'workspace' => $workspace, // Workspace ID
+  		 'workspace' => WORKSPACE, // Workspace ID
   		 'name' => "New item #".$current, // Name of task
-       'projects' => PQINEWITEMS,
-       "html_notes" => $description,
-  		 'custom_fields' => [$fieldIDs["Barcode"] => $current]
-    ], array('opt_fields' => "html_notes"));
+       'projects' => array(PQINEWITEMS),
+       "notes" => $description,
+  		 'custom_fields' => [BARCODE_FIELD => $current]
+    ]);
 
-    $details .= "$current, \r\n";
+    $result = $asana->getData();
+
+  	if ($asana->hasError()) {
+      return array(
+        'statusCode' => 400,
+        'simple'     => 'Error connecting to Asana',
+        'message'    => 'Error while trying to connect to Asana, response code: ' . $asana->responseCode,
+      );
+  	}
+
+  	if (isset($result->id))
+  	{
+  			$details .= "$current=$result->id, ";
+  	}
+
   }
 
   return array(
