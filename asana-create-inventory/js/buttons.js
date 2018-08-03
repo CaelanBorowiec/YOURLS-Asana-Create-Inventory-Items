@@ -4,42 +4,41 @@ $(document).ready(function(){
     // actual buttons with progress meters.
     // You need to call this function once the page is loaded.
     // If you add buttons later, you will need to call the function only for them.
-
     $('.progress-button').progressInitialize();
 
-    // Listen for clicks on the first three buttons, and start
-    // the progress animations
-
-    $('#submitButton').click(function(e){
-        e.preventDefault();
-
-        // This function will show a progress meter for
-        // the specified amount of time
-
-        $(this).progressTimed(2);
-    });
-
-    $('#actionButton').click(function(e){
-        e.preventDefault();
-        $(this).progressTimed(2);
-    });
-
+    var finished = false;
     $('#generateButton').one('click', function(e){
         e.preventDefault();
-
-        // It can take a callback
-
         var button = $(this);
-        button.progressTimed(3, function(){
 
-            // In this callback, you can set the href attribute of the button
-            // to the URL of the generated file. For the demo, we will only
-            // set up a new event listener that alerts a message.
+        if (!finished)
+        {
+          button.progressSet(5);
 
-            button.click(function(){
-                alert('Showing how a callback works!');
+          var start = 100276;
+          var num = 10;
+
+          var i = 0;
+          var progress = 0;
+          while (i<num)
+          {
+            //alert("Pass "+i);
+            var code = start+i;
+            $.get( "/yourls-api.php?action=createaot&start="+code+"&count=1", function( data ) {
+              console.log(data);
+              progress += (100/num);
+              button.progressSet(progress);
+              if (progress >= 100)
+                finished = true;
             });
-        });
+            i++;
+          }
+        }
+        else if (finished)
+        {
+            alert("serve download!");
+        }
+
     });
 
     // Custom progress handling
