@@ -49,7 +49,7 @@ $(document).ready(function(){
             {
               $('#generateButton').on('click', function(e)
               {
-                console.log(csvString); // Print the csv we built with all the queries
+                //console.log(csvString); // Print the csv we built with all the queries
                 download(""+ new Date()+".csv", csvString);
               });
             }
