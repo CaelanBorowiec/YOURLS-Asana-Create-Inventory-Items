@@ -102,9 +102,10 @@ function create_aot_record() {
       continue;
     }
 
+    $title="New item #".$current;
     $asana->createTask([
   		 'workspace' => WORKSPACE, // Workspace ID
-  		 'name' => "New item #".$current, // Name of task
+  		 'name' => $title, // Name of task
        'projects' => array(PQINEWITEMS, "537393307143896"),
        "notes" => $description,
   		 'custom_fields' => [(string)BARCODE_FIELD => (string)$current]
@@ -115,11 +116,19 @@ function create_aot_record() {
   	if ($asana->hasError())
     {
       $error = true;
-      $importResults[$current] = 'failed';
+      $importResults[$current] = 'Asana failed';
   	}
   	else if (isset($result->id))
   	{
-  			$importResults[$current] = $result->id;
+      $long = "http://app.asana.com/0/0/".$result->id;
+      $shortResult = yourls_add_new_link($long, $current, $title);
+      if ($shortResult['status'] == 'success')
+        $importResults[$current] = $result->id;
+      else
+      {
+        $error = true;
+        $importResults[$current] = 'YOURLS failed';
+      }
   	}
   }
 
