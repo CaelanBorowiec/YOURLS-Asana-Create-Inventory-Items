@@ -50,7 +50,7 @@ $(document).ready(function(){
               $('#generateButton').on('click', function(e)
               {
                 console.log(csvString); // Print the csv we built with all the queries
-
+                download(""+ new Date()+".csv", csvString);
               });
             }
           });
@@ -284,3 +284,16 @@ $(document).ready(function(){
     };
 
 })(jQuery);
+
+function download(filename, text) {
+  var element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+  element.setAttribute('download', filename);
+
+  element.style.display = 'none';
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
+}
