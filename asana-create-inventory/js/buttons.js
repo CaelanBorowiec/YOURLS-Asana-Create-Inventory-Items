@@ -6,7 +6,7 @@ $(document).ready(function(){
     // If you add buttons later, you will need to call the function only for them.
     $('.progress-button').progressInitialize();
 
-    var finished = false;
+
     $('#generateButton').one('click', function(e){
         e.preventDefault();
         var button = $(this);
@@ -14,7 +14,7 @@ $(document).ready(function(){
 
         button.progressSet(5);
 
-        var start = 100296;
+        var start = $("#start").val();
         var num = 10;
 
         var i = 0;

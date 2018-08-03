@@ -34,7 +34,10 @@ function aot_create_item_display_page() {
         The actions below will allow you to generate a number of tasks, and simultaneously shorten them for printing.</p>
 
     <h2>Actions:</h2>
-    <p><a id="generateButton" href="#" class="progress-button red" data-loading="Generating..." data-finished="Download CSV" data-type="background-horizontal">Generate Items</a></p>
+    <p>
+      Starting ID: <input id="start" type="text" name="Start" value=""><br />
+      <a id="generateButton" href="#" class="progress-button red" data-loading="Generating..." data-finished="Download CSV" data-type="background-horizontal">Generate Items</a>
+    </p>
 
     <h3>Credits</h3>
     <ul>
