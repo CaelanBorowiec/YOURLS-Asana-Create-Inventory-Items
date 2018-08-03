@@ -12,29 +12,34 @@ $(document).ready(function(){
         e.preventDefault();
         var button = $(this);
 
-        button.progressSet(5);
+        button.progressSet(5); // Show some immediate user feedback
 
-        var start = parseInt($("#start").val(), 10);
+        var start = parseInt($("#start").val(), 10); // Make sure this is an int or we'll just be appending numbers
         var num = 3; // change this to an input
 
-        var i = 0;
-        var progress = 0;
-        while (i<num)
+        var i = 0; // Loop
+        var progress = 0; // Progress percentage
+        while (i < num)
         {
-          //alert("Pass "+i);
-          var code = start+i;
+          var code = start+i; // The shortURl
+          // Call the YOURLS API defined in plugin.php.
+          // Note, we're using count=1 so that the API returns after every creation, which allows the button to update more often.
           $.get( "/yourls-api.php?action=createaot&start="+code+"&count=1", function( data ) {
             //console.log(data);
-            var xmlResults = $(data).find("results").text();
-            var jsonText = $('<textarea/>').html(xmlResults).text();
-            var jsonResults = JSON.parse(jsonText);
-            var keys = Object.keys(jsonResults);
+
+            //Error checking should be added here
+
+            var xmlResults = $(data).find("results").text(); // This should be JSON inside XML
+            var jsonText = $('<textarea/>').html(xmlResults).text(); // Fix encoding
+            var jsonResults = JSON.parse(jsonText); // Create a json object from the string
+            var keys = Object.keys(jsonResults);  // We only really care about the shortURL 'key'
 
             $.each(keys, function( index, value ) {
-              console.log( index + ": " + value );
-              if ($.isNumeric(value))
+              //console.log( index + ": " + value ); // Prints the array position : the key (shorturl)
+              //console.log("-> " + jsonResults[value]); // Prints the key value (asana id or error)
+              if ($.isNumeric(jsonResults[value]))
               {
-                csvArray.push(keys[index]);
+                csvArray.push(keys[index], window.location.hostname+keys[index]); // Add this shortURL to the array
               }
             });
 
@@ -45,7 +50,7 @@ $(document).ready(function(){
               $('#generateButton').on('click', function(e)
               {
                 alert("serve download!");
-                console.log(csvArray);
+                console.log(csvArray); // Print the array we built with all the queries
 
               });
             }
