@@ -7,7 +7,7 @@ $(document).ready(function(){
     $('.progress-button').progressInitialize();
 
 
-    var csvArray = [];
+    var csvString = "";
     $('#generateButton').one('click', function(e){
         e.preventDefault();
         var button = $(this);
@@ -39,7 +39,7 @@ $(document).ready(function(){
               //console.log("-> " + jsonResults[value]); // Prints the key value (asana id or error)
               if ($.isNumeric(jsonResults[value]))
               {
-                csvArray[keys[index]] = window.location.hostname+"/"+keys[index]; // Add this shortURL to the array
+                csvString += keys[index] + "," + window.location.hostname+"/"+keys[index] + "\n";
               }
             });
 
@@ -49,8 +49,7 @@ $(document).ready(function(){
             {
               $('#generateButton').on('click', function(e)
               {
-                alert("serve download!");
-                console.log(csvArray); // Print the array we built with all the queries
+                console.log(csvString); // Print the csv we built with all the queries
 
               });
             }
