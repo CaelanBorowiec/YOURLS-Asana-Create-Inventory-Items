@@ -8,9 +8,7 @@ Author: Caelan Borowiec
 Author URI: https://github.com/CaelanBorowiec
 */
 
-define("PQINEWITEMS", "753161808822863");
-define("LEVYLABNEWITEMS", "687756245553300");
-define("LEVYLABNEWSAMPLES", "687756245553298");
+require_once('settings.php');
 
 // No direct load
 if ( !defined ('YOURLS_ABSPATH') ) { die(); }
@@ -85,8 +83,22 @@ function create_aot_record() {
   $last = $current + $count;
   $details = "";
 
-  for (; $current <= $last; $current++) {
-    PQINEWITEMS
+  $description = "1. Describe the item and attach a photo
+2. Add location details
+3. Remove from new items project";
+
+  for (; $current <= $last; $current++)
+  {
+    $asana->createTask([
+  		 'workspace' => $workspace, // Workspace ID
+  		 'name' => "New item #".$current, // Name of task
+       'projects' => PQINEWITEMS,
+       "notes" => $description,
+  		 'custom_fields' => [$fieldIDs["Barcode"] => $current]
+    ], array('opt_fields' => "html_notes"));
+
+
+
     $details .= "$current, \r\n";
   }
 
