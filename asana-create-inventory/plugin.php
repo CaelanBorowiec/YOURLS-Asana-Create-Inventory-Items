@@ -95,6 +95,13 @@ function create_aot_record() {
   $importResults = array();
   for (; $current <= $last; $current++)
   {
+    if(yourls_is_shorturl($current))
+    {
+      $error = true;
+      $importResults[$current] = 'exists';
+      continue;
+    }
+
     $asana->createTask([
   		 'workspace' => WORKSPACE, // Workspace ID
   		 'name' => "New item #".$current, // Name of task
@@ -108,7 +115,7 @@ function create_aot_record() {
   	if ($asana->hasError())
     {
       $error = true;
-      $importResults[$current] = 'error';
+      $importResults[$current] = 'failed';
   	}
   	else if (isset($result->id))
   	{
@@ -120,8 +127,8 @@ function create_aot_record() {
   {
     return array(
       'statusCode' => 400,
-      'simple'     => 'Error connecting to Asana',
-      'message'    => 'Error while trying to connect to Asana, response code: ' . $asana->responseCode,
+      'simple'     => 'Error while creating items in Asana',
+      'message'    => 'One or more errors occured creating items in Asana.  Please review the results list of the outcome of each code attempt.',
       'results'      => json_encode($importResults),
     );
   }
