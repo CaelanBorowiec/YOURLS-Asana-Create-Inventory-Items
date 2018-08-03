@@ -7,6 +7,7 @@ $(document).ready(function(){
     $('.progress-button').progressInitialize();
 
 
+    var newcodes;
     $('#generateButton').one('click', function(e){
         e.preventDefault();
         var button = $(this);
@@ -14,8 +15,8 @@ $(document).ready(function(){
 
         button.progressSet(5);
 
-        var start = $("#start").val();
-        var num = 10;
+        var start = parseInt($("#start").val(), 10);
+        var num = 1;
 
         var i = 0;
         var progress = 0;
@@ -25,19 +26,26 @@ $(document).ready(function(){
           var code = start+i;
           $.get( "/yourls-api.php?action=createaot&start="+code+"&count=1", function( data ) {
             console.log(data);
+            var xmlResults = $(data).find("results").text();
+            var jsonText = $('<textarea/>').html(xmlResults).text();
+            var jsonResults = JSON.parse(jsonText);
+
+
+            console.log(JSON.parse(newcodes));
+
             progress += (100/num);
             button.progressSet(progress);
             if (progress >= 100)
             {
-              $('#generateButton').on('click', function(e){
+              $('#generateButton').on('click', function(e)
+              {
                 alert("serve download!");
+
               });
             }
           });
           i++;
         }
-
-
 
     });
 
