@@ -39,7 +39,7 @@ $(document).ready(function(){
               //console.log("-> " + jsonResults[value]); // Prints the key value (asana id or error)
               if ($.isNumeric(jsonResults[value]))
               {
-                csvArray.push(keys[index], window.location.hostname+keys[index]); // Add this shortURL to the array
+                csvArray[keys[index]] = window.location.hostname+"/"+keys[index]; // Add this shortURL to the array
               }
             });
 
