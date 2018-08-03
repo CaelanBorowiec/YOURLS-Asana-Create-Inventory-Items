@@ -7,16 +7,15 @@ $(document).ready(function(){
     $('.progress-button').progressInitialize();
 
 
-    var newcodes;
+    var csvArray = [];
     $('#generateButton').one('click', function(e){
         e.preventDefault();
         var button = $(this);
 
-
         button.progressSet(5);
 
         var start = parseInt($("#start").val(), 10);
-        var num = 1;
+        var num = 3; // change this to an input
 
         var i = 0;
         var progress = 0;
@@ -25,13 +24,19 @@ $(document).ready(function(){
           //alert("Pass "+i);
           var code = start+i;
           $.get( "/yourls-api.php?action=createaot&start="+code+"&count=1", function( data ) {
-            console.log(data);
+            //console.log(data);
             var xmlResults = $(data).find("results").text();
             var jsonText = $('<textarea/>').html(xmlResults).text();
             var jsonResults = JSON.parse(jsonText);
+            var keys = Object.keys(jsonResults);
 
-
-            console.log(JSON.parse(newcodes));
+            $.each(keys, function( index, value ) {
+              console.log( index + ": " + value );
+              if ($.isNumeric(value))
+              {
+                csvArray.push(keys[index]);
+              }
+            });
 
             progress += (100/num);
             button.progressSet(progress);
@@ -40,6 +45,7 @@ $(document).ready(function(){
               $('#generateButton').on('click', function(e)
               {
                 alert("serve download!");
+                console.log(csvArray);
 
               });
             }
