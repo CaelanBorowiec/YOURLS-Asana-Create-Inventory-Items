@@ -126,7 +126,7 @@ function create_aot_record() {
   if ($error)
   {
     return array(
-      'statusCode' => 400,
+      'statusCode' => 422,
       'simple'     => 'Error while creating items in Asana',
       'message'    => 'One or more errors occured creating items in Asana.  Please review the results list of the outcome of each code attempt.',
       'results'      => json_encode($importResults),
