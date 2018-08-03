@@ -91,38 +91,46 @@ function create_aot_record() {
 2. Add location details
 3. Remove from new items project";
 
+  $error = false;
+  $importResults = array();
   for (; $current <= $last; $current++)
   {
     $asana->createTask([
   		 'workspace' => WORKSPACE, // Workspace ID
   		 'name' => "New item #".$current, // Name of task
-       'projects' => array(PQINEWITEMS),
+       'projects' => array(PQINEWITEMS, "537393307143896"),
        "notes" => $description,
-  		 'custom_fields' => [BARCODE_FIELD => $current]
+  		 'custom_fields' => [(string)BARCODE_FIELD => (string)$current]
     ]);
 
     $result = $asana->getData();
 
-  	if ($asana->hasError()) {
-      return array(
-        'statusCode' => 400,
-        'simple'     => 'Error connecting to Asana',
-        'message'    => 'Error while trying to connect to Asana, response code: ' . $asana->responseCode,
-      );
+  	if ($asana->hasError())
+    {
+      $error = true;
+      $importResults[$current] = 'error';
   	}
-
-  	if (isset($result->id))
+  	else if (isset($result->id))
   	{
-  			$details .= "$current=$result->id, ";
+  			$importResults[$current] = $result->id;
   	}
+  }
 
+  if ($error)
+  {
+    return array(
+      'statusCode' => 400,
+      'simple'     => 'Error connecting to Asana',
+      'message'    => 'Error while trying to connect to Asana, response code: ' . $asana->responseCode,
+      'results'      => json_encode($importResults),
+    );
   }
 
   return array(
     'statusCode'  => 200,
     'simple'      => 'ok',
     'message'     => "Created $count barcodes from $start to $last",
-    'details'     => $details,
+    'results'     => json_encode($importResults),
   );
 
 
