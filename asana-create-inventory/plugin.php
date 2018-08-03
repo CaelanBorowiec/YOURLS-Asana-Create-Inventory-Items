@@ -9,6 +9,7 @@ Author URI: https://github.com/CaelanBorowiec
 */
 
 require_once('settings.php');
+require_once('asana-api-php-class/asana.php');
 
 // No direct load
 if ( !defined ('YOURLS_ABSPATH') ) { die(); }
@@ -77,6 +78,9 @@ function create_aot_record() {
 		);
 	}
 
+  $asana = new Asana([
+      'personalAccessToken' => $asanaPAT
+  ]);
 
   $start = $_REQUEST['start'];
   $current = $start;
@@ -93,11 +97,9 @@ function create_aot_record() {
   		 'workspace' => $workspace, // Workspace ID
   		 'name' => "New item #".$current, // Name of task
        'projects' => PQINEWITEMS,
-       "notes" => $description,
+       "html_notes" => $description,
   		 'custom_fields' => [$fieldIDs["Barcode"] => $current]
     ], array('opt_fields' => "html_notes"));
-
-
 
     $details .= "$current, \r\n";
   }
