@@ -86,7 +86,8 @@ function create_aot_record() {
 	}
 
   $asana = new Asana([
-      'personalAccessToken' => asanaPAT
+      'personalAccessToken' => asanaPAT,
+      'fastAPI' => true
   ]);
 
   $start = $_REQUEST['start'];
