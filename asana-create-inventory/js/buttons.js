@@ -16,6 +16,7 @@ $(document).ready(function(){
 
         var start = parseInt($("#start").val(), 10); // Make sure this is an int or we'll just be appending numbers
         var num = parseInt($("#count").val(), 10);
+        var prefix = $("#prefix").val();
 
         var i = 0; // Loop
         var progress = 0; // Progress percentage
