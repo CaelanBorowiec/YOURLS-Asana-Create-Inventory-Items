@@ -35,7 +35,7 @@ function aot_create_item_display_page() {
 
     <h2>Actions:</h2>
     <p>
-      Starting ID: <input id="start" type="text" name="Start" value=""><br />
+      Starting ID: <input id="start" type="text" name="Start" value=""> Count: <input id="count" type="text" name="Count" value=""><br />
       <a id="generateButton" href="#" class="progress-button red" data-loading="Generating..." data-finished="Download CSV" data-type="background-horizontal">Generate Items</a>
     </p>
 
@@ -113,7 +113,7 @@ function create_aot_record() {
     $asana->createTask([
   		 'workspace' => WORKSPACE, // Workspace ID
   		 'name' => $title, // Name of task
-       'projects' => array(PQINEWITEMS, "537393307143896"),
+       'projects' => array(PQINEWITEMS, PQIALLITEMS),
        "notes" => $description,
   		 'custom_fields' => [(string)BARCODE_FIELD => (string)$current]
     ]);

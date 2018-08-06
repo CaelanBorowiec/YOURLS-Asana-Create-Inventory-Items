@@ -15,7 +15,7 @@ $(document).ready(function(){
         button.progressSet(5); // Show some immediate user feedback
 
         var start = parseInt($("#start").val(), 10); // Make sure this is an int or we'll just be appending numbers
-        var num = 3; // change this to an input
+        var num = parseInt($("#count").val(), 10);
 
         var i = 0; // Loop
         var progress = 0; // Progress percentage
