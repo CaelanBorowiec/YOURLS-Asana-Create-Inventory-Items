@@ -26,13 +26,15 @@ function aot_create_item_display_page() {
   ?>
   <div class="about">
     <link href="http://fonts.googleapis.com/css?family=Raleway:400,700" rel="stylesheet" />
+    <link href="<?php echo yourls_plugin_url("asana-create-inventory"); ?>/css/index.css" rel="stylesheet" />
     <link href="<?php echo yourls_plugin_url("asana-create-inventory"); ?>/css/buttons.css" rel="stylesheet" />
     <script src="<?php echo yourls_plugin_url("asana-create-inventory"); ?>/js/buttons.js"></script>
 
     <h2>Plugin Overview</h2>
     <p>This plugin is a tool for creating "Asana of Things" items in <a href="https://asana.com/product" target="_blank"><b>Asana</b></a>.
         The actions below will allow you to generate a number of tasks, and simultaneously shorten them for printing.</p>
-
+  </div>
+  <div class="actions">
     <h2>Actions:</h2>
     <p>
       Starting ID: <input id="start" type="text" name="Start" value=""> Count: <input id="count" type="text" name="Count" value=""><br />
