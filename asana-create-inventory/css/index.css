@@ -2,3 +2,12 @@
     margin-bottom: 15px;
     max-width: 10ch;
 }
+div.input>span {
+    font-size: smaller;
+    font-style: italic;
+}
+div.input>label {
+    min-width: 120px;
+    display: inline-block;
+    border-bottom: 1px #333 dotted;
+}

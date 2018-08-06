@@ -36,10 +36,27 @@ function aot_create_item_display_page() {
   </div>
   <div class="actions">
     <h2>Actions:</h2>
+
     <p>
-      Starting ID: <input id="start" type="text" name="Start" value=""> Count: <input id="count" type="text" name="Count" value=""><br />
-      <a id="generateButton" href="#" class="progress-button red" data-loading="Generating..." data-finished="Download CSV" data-type="background-horizontal">Generate Items</a>
+      <div class="input">
+        <label for="Start">First Unused:</label>
+        <input id="start" type="number" name="Start" value="" required>
+        <span>The first free barcode number (without SA or other prefix).</span>
+      </div>
+      <div class="input">
+        <label for="Count">Count:</label>
+        <input id="count" type="number" name="Count" value="" required>
+        <span>The number of blank items to create.</span>
+      </div>
+      <div class="input">
+        <label for="Prefix">Barcode Prefix:</label>
+        <input id="prefix" type="text" name="Prefix" value="">
+        <span>For example, enter <strong>SA</strong> to generate sample codes such as SA123456.</span>
+      </div>
+
+      <div id="generate"><a id="generateButton" href="#" class="progress-button red" data-loading="Generating..." data-finished="Download CSV" data-type="background-horizontal">Generate Items</a></div>
     </p>
+
 
     <h3>Credits</h3>
     <ul>
