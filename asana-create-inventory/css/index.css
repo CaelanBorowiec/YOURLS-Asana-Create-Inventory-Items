@@ -10,4 +10,5 @@ div.input>label {
     min-width: 120px;
     display: inline-block;
     border-bottom: 1px #333 dotted;
+    font-weight: bold;
 }
