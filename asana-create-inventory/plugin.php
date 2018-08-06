@@ -74,8 +74,11 @@ yourls_add_filter( 'api_action_createaot', 'create_aot_record' );
 function create_aot_record() {
   //  API can't be accessed without a valid login already (YOURLS Default)
 
-	// Need 'count' parameter
   $count = $_REQUEST['count'];
+  $start = $_REQUEST['start'];
+  $prefix = $_REQUEST['prefix'];
+
+	// Need 'count' parameter
 	if( !isset($count) || !is_numeric($count))
   {
 		return array(
@@ -85,7 +88,7 @@ function create_aot_record() {
 		);
 	}
   // Need 'start' parameter
-  if(!isset($_REQUEST['start']) || !is_numeric($_REQUEST['start']))
+  if(!isset($start) || !is_numeric($start))
   {
     return array(
       'statusCode' => 400,
@@ -94,8 +97,9 @@ function create_aot_record() {
     );
   }
 
+
 	// Check if valid shorturl
-	if(yourls_is_shorturl($_REQUEST['start']))
+	if(yourls_is_shorturl($start))
   {
 		return array(
 			'statusCode' => 400,
@@ -109,7 +113,7 @@ function create_aot_record() {
       'fastAPI' => true
   ]);
 
-  $start = $_REQUEST['start'];
+
   $current = $start;
   $last = $current + $count - 1;
   $details = "";
