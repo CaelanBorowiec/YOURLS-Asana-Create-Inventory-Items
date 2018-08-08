@@ -99,7 +99,7 @@ function create_aot_record() {
 
 
 	// Check if valid shorturl
-	if(yourls_is_shorturl($start))
+	if(yourls_is_shorturl($prefix.$start))
   {
 		return array(
 			'statusCode' => 400,
@@ -133,13 +133,13 @@ function create_aot_record() {
       continue;
     }
 
-    $title="New item #".$current;
+    $title="New item #".$prefix.$current;
     $asana->createTask([
   		 'workspace' => WORKSPACE, // Workspace ID
   		 'name' => $title, // Name of task
        'projects' => array(PQINEWITEMS, PQIALLITEMS),
        "notes" => $description,
-  		 'custom_fields' => [(string)BARCODE_FIELD => (string)$current]
+  		 'custom_fields' => [(string)BARCODE_FIELD => (string)$prefix.$current]
     ]);
 
     $result = $asana->getData();
@@ -147,18 +147,18 @@ function create_aot_record() {
   	if ($asana->hasError())
     {
       $error = true;
-      $importResults[$current] = 'Asana failed';
+      $importResults[$prefix.$current] = 'Asana failed';
   	}
   	else if (isset($result->id))
   	{
       $long = "http://app.asana.com/0/0/".$result->id;
-      $shortResult = yourls_add_new_link($long, $current, $title);
+      $shortResult = yourls_add_new_link($long, $prefix.$current, $title);
       if ($shortResult['status'] == 'success')
-        $importResults[$current] = $result->id;
+        $importResults[$prefix.$current] = $result->id;
       else
       {
         $error = true;
-        $importResults[$current] = 'YOURLS failed';
+        $importResults[$prefix.$current] = 'YOURLS failed';
       }
   	}
   }
@@ -176,7 +176,7 @@ function create_aot_record() {
   return array(
     'statusCode'  => 200,
     'simple'      => 'ok',
-    'message'     => "Created $count barcodes from $start to $last",
+    'message'     => "Created $count barcodes from $prefix$start to $prefix$last",
     'results'     => json_encode($importResults),
   );
 
