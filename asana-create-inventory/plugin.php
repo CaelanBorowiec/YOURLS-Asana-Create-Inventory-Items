@@ -51,7 +51,7 @@ function aot_create_item_display_page() {
       <div class="input">
         <label for="Prefix">Barcode Prefix:</label>
         <input id="prefix" type="text" name="Prefix" value="">
-        <span>For example, enter <strong>SA</strong> to generate sample codes such as SA123456.</span>
+        <span><strong>Optional:</strong> For example, enter <strong>SA</strong> to generate sample codes such as SA123456.</span>
       </div>
 
       <div id="generate"><a id="generateButton" href="#" class="progress-button red" data-loading="Generating..." data-finished="Download CSV" data-type="background-horizontal">Generate Items</a></div>
