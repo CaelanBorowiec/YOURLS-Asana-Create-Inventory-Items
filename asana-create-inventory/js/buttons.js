@@ -26,7 +26,7 @@ $(document).ready(function(){
           // Call the YOURLS API defined in plugin.php.
           // Note, we're using count=1 so that the API returns after every creation, which allows the button to update more often.
           var yourlsAPI = "/yourls-api.php?action=createaot&start="+code+"&count=1";
-          if ((typeof prefix != "undefined" && prefix != null))
+          if (prefix != "")
             yourlsAPI += "&prefix="+prefix;
 
           $.get( yourlsAPI, function( data ) {
