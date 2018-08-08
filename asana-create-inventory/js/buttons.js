@@ -58,6 +58,10 @@ $(document).ready(function(){
                 download(""+ new Date()+".csv", csvString);
               });
             }
+          }).fail(function(data) {
+              // data.responseText has the info YOURLS returned
+              console.log(data.responseText);
+              alert($(data.responseText).find("message").text());
           });
           i++;
         }
