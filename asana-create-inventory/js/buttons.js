@@ -18,6 +18,14 @@ $(document).ready(function(){
         var num = parseInt($("#count").val(), 10);
         var prefix = $("#prefix").val();
 
+        if (isNaN(start) || start <= 1)
+        {
+          alert("Please enter a starting barcode number.");
+          throw new Error("Please enter a starting barcode number.");
+        }
+        if (isNaN(num) || num <= 1)
+          num = 1;
+
         var i = 0; // Loop
         var progress = 0; // Progress percentage
         while (i < num)
