@@ -25,7 +25,11 @@ $(document).ready(function(){
           var code = start+i; // The shortURl
           // Call the YOURLS API defined in plugin.php.
           // Note, we're using count=1 so that the API returns after every creation, which allows the button to update more often.
-          $.get( "/yourls-api.php?action=createaot&start="+code+"&count=1", function( data ) {
+          var yourlsAPI = "/yourls-api.php?action=createaot&start="+code+"&count=1";
+          if ((typeof prefix != "undefined" && prefix != null))
+            yourlsAPI += "&prefix="+prefix;
+
+          $.get( yourlsAPI, function( data ) {
             //console.log(data);
 
             //Error checking should be added here
