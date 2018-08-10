@@ -27,7 +27,10 @@ $(document).ready(function(){
         throw new Error("Please enter a starting barcode number.");
       }
       if (isNaN(num) || num <= 1)
+      {
         num = 1;
+        printError("No count entered, assuming 1.");
+      }
 
       var i = 0; // Loop
       var progress = 0; // Progress percentage
@@ -72,10 +75,12 @@ $(document).ready(function(){
         }).fail(function(data)
         {
           // data.responseText has the info YOURLS returned
-          console.log(data.responseText);
+          //console.log(data.responseText);
           var statusCode = $(data.responseText).find("statusCode").text();
 
-          if (statusCode == 400)  // Hard failure
+          //Because we're hitting the backend with single requests, a failed code will always exit with '400'
+          //We can check num==1 to see if it is the only request.
+          if (num == 1 && statusCode == 400)  // Hard failure
           {
             printError("Failed to run: " + $(data.responseText).find("message").text());
             //throw new Error("Failed to run: " + $(data.responseText).find("message").text());
@@ -91,8 +96,9 @@ $(document).ready(function(){
           {
             progress += (100/num);
             button.progressSet(progress);
-
-            printError($(data.responseText).find("message").text());
+            var errorMessage = $(data.responseText).find("message").text();
+            errorMessage = errorMessage.replace("Start v", "V");  // Don't say "Start value"
+            printError(errorMessage);
           }
         });
         i++;
