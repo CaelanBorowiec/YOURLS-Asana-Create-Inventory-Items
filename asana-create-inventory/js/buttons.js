@@ -1,93 +1,104 @@
 $(document).ready(function(){
-
     // Convert all the links with the progress-button class to
     // actual buttons with progress meters.
     // You need to call this function once the page is loaded.
     // If you add buttons later, you will need to call the function only for them.
     $('.progress-button').progressInitialize();
 
-
     var csvString = "";
-    $('#generateButton').one('click', function(e){
-        e.preventDefault();
-        var button = $(this);
+    $('#generateButton').one('click', StartGenerateButton);
 
-        button.progressSet(5); // Show some immediate user feedback
+  function StartGenerateButton(e){
+      e.preventDefault();
+      var button = $(this);
 
-        var start = parseInt($("#start").val(), 10); // Make sure this is an int or we'll just be appending numbers
-        var num = parseInt($("#count").val(), 10);
-        var prefix = $("#prefix").val();
+      button.progressSet(5); // Show some immediate user feedback
 
-        if (isNaN(start) || start <= 1)
-        {
-          alert("Please enter a starting barcode number.");
-          throw new Error("Please enter a starting barcode number.");
-        }
-        if (isNaN(num) || num <= 1)
-          num = 1;
+      var start = parseInt($("#start").val(), 10); // Make sure this is an int or we'll just be appending numbers
+      var num = parseInt($("#count").val(), 10);
+      var prefix = $("#prefix").val();
 
-        var i = 0; // Loop
-        var progress = 0; // Progress percentage
-        while (i < num)
-        {
-          var code = start+i; // The shortURl
-          // Call the YOURLS API defined in plugin.php.
-          // Note, we're using count=1 so that the API returns after every creation, which allows the button to update more often.
-          var yourlsAPI = "/yourls-api.php?action=createaot&start="+code+"&count=1";
-          if (prefix != "")
-            yourlsAPI += "&prefix="+prefix;
+      if (isNaN(start) || start <= 1)
+      {
+        alert("Please enter a starting barcode number.");
+        throw new Error("Please enter a starting barcode number.");
+      }
+      if (isNaN(num) || num <= 1)
+        num = 1;
 
-          $.get( yourlsAPI, function( data ) {
-            //console.log(data);
+      var i = 0; // Loop
+      var progress = 0; // Progress percentage
+      while (i < num)
+      {
+        var code = start+i; // The shortURl
+        // Call the YOURLS API defined in plugin.php.
+        // Note, we're using count=1 so that the API returns after every creation, which allows the button to update more often.
+        var yourlsAPI = "/yourls-api.php?action=createaot&start="+code+"&count=1";
+        if (prefix != "")
+          yourlsAPI += "&prefix="+prefix;
 
-            //Error checking should be added here
+        $.get( yourlsAPI, function( data ) {
+          //console.log(data);
 
-            var xmlResults = $(data).find("results").text(); // This should be JSON inside XML
-            var jsonText = $('<textarea/>').html(xmlResults).text(); // Fix encoding
-            var jsonResults = JSON.parse(jsonText); // Create a json object from the string
-            var keys = Object.keys(jsonResults);  // We only really care about the shortURL 'key'
+          //Error checking should be added here
 
-            $.each(keys, function( index, value ) {
-              //console.log( index + ": " + value ); // Prints the array position : the key (shorturl)
-              //console.log("-> " + jsonResults[value]); // Prints the key value (asana id or error)
-              if ($.isNumeric(jsonResults[value]))
-              {
-                csvString += keys[index] + "," + window.location.hostname+"/"+keys[index] + "\n";
-              }
-            });
+          var xmlResults = $(data).find("results").text(); // This should be JSON inside XML
+          var jsonText = $('<textarea/>').html(xmlResults).text(); // Fix encoding
+          var jsonResults = JSON.parse(jsonText); // Create a json object from the string
+          var keys = Object.keys(jsonResults);  // We only really care about the shortURL 'key'
 
-            progress += (100/num);
-            button.progressSet(progress);
-            if (progress >= 100)
+          $.each(keys, function( index, value ) {
+            //console.log( index + ": " + value ); // Prints the array position : the key (shorturl)
+            //console.log("-> " + jsonResults[value]); // Prints the key value (asana id or error)
+            if ($.isNumeric(jsonResults[value]))
             {
-              $('#generateButton').on('click', function(e)
-              {
-                //console.log(csvString); // Print the csv we built with all the queries
-                download(""+ new Date()+".csv", csvString);
-              });
+              csvString += keys[index] + "," + window.location.hostname+"/"+keys[index] + "\n";
             }
-          }).fail(function(data)
+          });
+
+          progress += (100/num);
+          button.progressSet(progress);
+          if (progress >= 100)
           {
-            // data.responseText has the info YOURLS returned
-            console.log(data.responseText);
-            var statusCode = $(data.responseText).find("statusCode").text();
-            if (statusCode == 400)
+            $('#generateButton').on('click', function(e)
             {
-              alert("Failed to run: " + $(data.responseText).find("message").text());
-              throw new Error("Failed to run: " + $(data.responseText).find("message").text());
-              button.progressSet(0);
-            }
+              //console.log(csvString); // Print the csv we built with all the queries
+              button.attr("data-finished", "Download CSV");
+              button.removeClass('failure');
+              button.addClass('success');
+              download(""+ new Date()+".csv", csvString);
+            });
+          }
+        }).fail(function(data)
+        {
+          // data.responseText has the info YOURLS returned
+          console.log(data.responseText);
+          var statusCode = $(data.responseText).find("statusCode").text();
 
+          if (statusCode == 400)  // Hard failure
+          {
+            alert("Failed to run: " + $(data.responseText).find("message").text());
+            //throw new Error("Failed to run: " + $(data.responseText).find("message").text());
+            button.attr("data-finished", "Failed. Try again?");
+            button.removeClass('success');
+            button.addClass('failure');
+            button.progressSet(100);
 
+            button.one('click', StartGenerateButton);
+            i = num; // Should be break
+          }
+          else
+          {
             progress += (100/num);
             button.progressSet(progress);
 
             alert($(data.responseText).find("message").text());
-          });
-          i++;
-        }
+          }
+        });
+        i++;
+      }
 
-    });
+  }
 
     // Custom progress handling
 
