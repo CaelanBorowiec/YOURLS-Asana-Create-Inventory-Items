@@ -66,10 +66,23 @@ $(document).ready(function(){
                 download(""+ new Date()+".csv", csvString);
               });
             }
-          }).fail(function(data) {
-              // data.responseText has the info YOURLS returned
-              console.log(data.responseText);
-              alert($(data.responseText).find("message").text());
+          }).fail(function(data)
+          {
+            // data.responseText has the info YOURLS returned
+            console.log(data.responseText);
+            var statusCode = $(data.responseText).find("statusCode").text();
+            if (statusCode == 400)
+            {
+              alert("Failed to run: " + $(data.responseText).find("message").text());
+              throw new Error("Failed to run: " + $(data.responseText).find("message").text());
+              button.progressSet(0);
+            }
+
+
+            progress += (100/num);
+            button.progressSet(progress);
+
+            alert($(data.responseText).find("message").text());
           });
           i++;
         }
