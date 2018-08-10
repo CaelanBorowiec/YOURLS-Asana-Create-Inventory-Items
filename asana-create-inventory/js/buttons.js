@@ -23,7 +23,7 @@ $(document).ready(function(){
 
       if (isNaN(start) || start <= 1)
       {
-        alert("Please enter a starting barcode number.");
+        printError("Please enter a starting barcode number.");
         throw new Error("Please enter a starting barcode number.");
       }
       if (isNaN(num) || num <= 1)
@@ -77,7 +77,7 @@ $(document).ready(function(){
 
           if (statusCode == 400)  // Hard failure
           {
-            alert("Failed to run: " + $(data.responseText).find("message").text());
+            printError("Failed to run: " + $(data.responseText).find("message").text());
             //throw new Error("Failed to run: " + $(data.responseText).find("message").text());
             button.attr("data-finished", "Failed. Try again?");
             button.removeClass('success');
@@ -85,14 +85,14 @@ $(document).ready(function(){
             button.progressSet(100);
 
             button.one('click', StartGenerateButton);
-            i = num; // Should be break
+            i = num; // Should be "break"
           }
           else
           {
             progress += (100/num);
             button.progressSet(progress);
 
-            alert($(data.responseText).find("message").text());
+            printError($(data.responseText).find("message").text());
           }
         });
         i++;
@@ -325,6 +325,11 @@ $(document).ready(function(){
     };
 
 })(jQuery);
+
+function printError(error)
+{
+  $('#errors').val($('#errors').val() + "\n" + error);
+}
 
 function download(filename, text) {
   var element = document.createElement('a');

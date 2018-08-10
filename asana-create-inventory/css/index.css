@@ -12,3 +12,9 @@ div.input>label {
     border-bottom: 1px #333 dotted;
     font-weight: bold;
 }
+#errors {
+  display: block;
+  width: 303px;
+  height: 90px;
+  background: #eee;
+}
