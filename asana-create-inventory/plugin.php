@@ -134,11 +134,17 @@ function create_aot_record() {
       continue;
     }
 
+    $projects = array(LEVYLABNEWITEMS, LEVYLABALLITEMS);
+    if (strcasecmp($prefix, "SA"))
+    {
+      $projects = array(LEVYLABNEWSAMPLES, LEVYLABALLITEMS);
+    }
+
     $title="New item #".$prefix.$current;
     $asana->createTask([
   		 'workspace' => WORKSPACE, // Workspace ID
   		 'name' => $title, // Name of task
-       'projects' => array(PQINEWITEMS, PQIALLITEMS),
+       'projects' => array(LEVYLABNEWITEMS, LEVYLABALLITEMS),
        "notes" => $description,
   		 'custom_fields' => [(string)BARCODE_FIELD => (string)$prefix.$current]
     ]);
