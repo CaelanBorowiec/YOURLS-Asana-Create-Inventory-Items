@@ -13,6 +13,9 @@ $(document).ready(function(){
       var button = $(this);
 
       button.progressSet(5); // Show some immediate user feedback
+      button.attr("data-finished", "Download CSV");
+      button.removeClass('failure');
+      button.addClass('success');
 
       var start = parseInt($("#start").val(), 10); // Make sure this is an int or we'll just be appending numbers
       var num = parseInt($("#count").val(), 10);
@@ -63,9 +66,6 @@ $(document).ready(function(){
             $('#generateButton').on('click', function(e)
             {
               //console.log(csvString); // Print the csv we built with all the queries
-              button.attr("data-finished", "Download CSV");
-              button.removeClass('failure');
-              button.addClass('success');
               download(""+ new Date()+".csv", csvString);
             });
           }
