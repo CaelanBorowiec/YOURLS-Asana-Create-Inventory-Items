@@ -49,7 +49,12 @@
 
 .progress-button.finished:after{
     content:attr(data-finished);
-    background-color: green;
+}
+.progress-button.finished.success:after {
+  background-color: green;
+}
+.progress-button.finished.failure:after {
+  background-color: red;
 }
 
 /* The colorful bar that grows depending on the progress */
