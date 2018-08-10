@@ -104,8 +104,8 @@ function create_aot_record() {
   {
 		return array(
 			'statusCode' => 400,
-			'simple'     => 'Error: Start value already exists',
-			'message'    => 'Error: Start value already exists',
+			'simple'     => 'Error: Start value ('.$start.') already exists',
+			'message'    => 'Error: Start value ('.$start.') already exists',
 		);
 	}
 
