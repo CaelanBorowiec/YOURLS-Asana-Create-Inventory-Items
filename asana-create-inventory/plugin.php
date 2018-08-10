@@ -55,6 +55,7 @@ function aot_create_item_display_page() {
       </div>
 
       <div id="generate"><a id="generateButton" href="#" class="progress-button red" data-loading="Generating..." data-finished="Download CSV" data-type="background-horizontal">Generate Items</a></div>
+      <textarea disabled="" id="errors">Log:</textarea>
     </p>
 
 
